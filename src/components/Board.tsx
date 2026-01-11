@@ -14,7 +14,7 @@ import { TaskCard } from './TaskCard';
 import { TaskModal } from './TaskModal';
 
 export function Board() {
-  const { boardState, addTask, updateTask, deleteTask, moveTask } = useBoard();
+  const { boardState, isLoading, error, addTask, updateTask, deleteTask, moveTask } = useBoard();
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -108,8 +108,22 @@ export function Board() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+        <div className="text-gray-500">Loading board...</div>
+      </div>
+    );
+  }
+
   return (
     <>
+      {error && (
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mx-6 mt-4">
+          <p className="text-yellow-700 text-sm">{error} - Using local data</p>
+        </div>
+      )}
+
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
