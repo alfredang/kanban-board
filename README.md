@@ -1,73 +1,93 @@
-# React + TypeScript + Vite
+# Kanban To-Do List App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern Kanban board application for managing tasks with drag-and-drop functionality.
 
-Currently, two official plugins are available:
+**Live Demo:** [https://kanban-todo-ten-psi.vercel.app](https://kanban-todo-ten-psi.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- **Kanban Board** - Visual task management with three columns:
+  - To Do
+  - In Progress
+  - Completed
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Drag & Drop** - Move tasks between columns or reorder within a column
 
-## Expanding the ESLint configuration
+- **Task Management**
+  - Create new tasks with title, description, priority, and tags
+  - Edit existing tasks
+  - Delete tasks
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Priority Levels** - Color-coded priorities:
+  - Low (green)
+  - Medium (yellow)
+  - High (red)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Tags** - Add multiple tags to categorize tasks
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Persistent Storage** - Data is stored in PostgreSQL (Neon) database, accessible from any device
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Tech Stack
+
+- **Frontend:** React 18 + TypeScript
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **Drag & Drop:** @dnd-kit
+- **Database:** PostgreSQL (Neon)
+- **Hosting:** Vercel
+
+## How It Works
+
+1. **View Tasks** - The board displays all tasks organized in three columns
+2. **Add Task** - Click the `+` button on any column to create a new task
+3. **Edit Task** - Hover over a task and click the pencil icon to edit
+4. **Delete Task** - Hover over a task and click the trash icon to delete
+5. **Move Task** - Drag a task by its handle (grip icon) and drop it in another column or position
+
+## Project Structure
+
+```
+├── api/                    # Vercel serverless functions
+│   ├── board.ts           # GET board data
+│   ├── init.ts            # Initialize database
+│   ├── tasks.ts           # POST create task
+│   └── tasks/
+│       ├── [id].ts        # PUT/DELETE individual task
+│       └── move.ts        # PUT move task
+├── src/
+│   ├── components/        # React components
+│   │   ├── Board.tsx      # Main Kanban board
+│   │   ├── Column.tsx     # Column container
+│   │   ├── TaskCard.tsx   # Draggable task card
+│   │   ├── TaskModal.tsx  # Create/edit modal
+│   │   ├── PriorityBadge.tsx
+│   │   └── TagBadge.tsx
+│   ├── hooks/
+│   │   ├── useBoard.ts    # Board state management
+│   │   └── useLocalStorage.ts
+│   ├── types/             # TypeScript interfaces
+│   └── utils/             # Utility functions
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Local Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# Install dependencies
+npm install
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
 ```
+
+## Environment Variables
+
+For database connectivity, set the following in Vercel:
+
+- `POSTGRES_URL` - PostgreSQL connection string (from Neon)
+
+## License
+
+MIT
