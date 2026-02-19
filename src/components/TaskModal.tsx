@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import type { Task } from '../types';
 
@@ -11,28 +10,15 @@ interface TaskModalProps {
 }
 
 export function TaskModal({ isOpen, onClose, onSave, task }: TaskModalProps) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium');
-  const [tagsInput, setTagsInput] = useState('');
-
-  useEffect(() => {
-    if (task) {
-      setTitle(task.title);
-      setDescription(task.description);
-      setPriority(task.priority);
-      setTagsInput(task.tags.join(', '));
-    } else {
-      setTitle('');
-      setDescription('');
-      setPriority('medium');
-      setTagsInput('');
-    }
-  }, [task, isOpen]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const title = String(formData.get('title') || '').trim();
+    const description = String(formData.get('description') || '').trim();
+    const priorityValue = String(formData.get('priority') || 'medium');
+    const tagsInput = String(formData.get('tags') || '');
+
+    if (!title) return;
 
     const tags = tagsInput
       .split(',')
@@ -40,9 +26,9 @@ export function TaskModal({ isOpen, onClose, onSave, task }: TaskModalProps) {
       .filter((tag) => tag.length > 0);
 
     onSave({
-      title: title.trim(),
-      description: description.trim(),
-      priority,
+      title,
+      description,
+      priority: priorityValue as 'low' | 'medium' | 'high',
       tags,
     });
 
@@ -52,15 +38,15 @@ export function TaskModal({ isOpen, onClose, onSave, task }: TaskModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg font-semibold text-gray-900">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-gray-900 border border-gray-800 rounded-xl shadow-2xl shadow-black/40 w-full max-w-md mx-4">
+        <div className="flex items-center justify-between p-4 border-b border-gray-800">
+          <h2 className="text-lg font-semibold text-white">
             {task ? 'Edit Task' : 'New Task'}
           </h2>
           <button
             onClick={onClose}
-            className="p-1 text-gray-400 hover:text-gray-600 rounded"
+            className="p-1 text-gray-500 hover:text-gray-300 rounded-lg hover:bg-gray-800 transition-colors"
           >
             <X size={20} />
           </button>
@@ -68,43 +54,43 @@ export function TaskModal({ isOpen, onClose, onSave, task }: TaskModalProps) {
 
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-1">
               Title *
             </label>
             <input
               id="title"
+              name="title"
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              defaultValue={task?.title ?? ''}
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Enter task title"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">
               Description
             </label>
             <textarea
               id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              name="description"
+              defaultValue={task?.description ?? ''}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
               placeholder="Enter task description"
             />
           </div>
 
           <div>
-            <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="priority" className="block text-sm font-medium text-gray-300 mb-1">
               Priority
             </label>
             <select
               id="priority"
-              value={priority}
-              onChange={(e) => setPriority(e.target.value as 'low' | 'medium' | 'high')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              name="priority"
+              defaultValue={task?.priority ?? 'medium'}
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>
@@ -113,15 +99,15 @@ export function TaskModal({ isOpen, onClose, onSave, task }: TaskModalProps) {
           </div>
 
           <div>
-            <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="tags" className="block text-sm font-medium text-gray-300 mb-1">
               Tags
             </label>
             <input
               id="tags"
+              name="tags"
               type="text"
-              value={tagsInput}
-              onChange={(e) => setTagsInput(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              defaultValue={task?.tags.join(', ') ?? ''}
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Enter tags separated by commas"
             />
             <p className="mt-1 text-xs text-gray-500">
@@ -133,13 +119,13 @@ export function TaskModal({ isOpen, onClose, onSave, task }: TaskModalProps) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-750 hover:text-white transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-white bg-violet-600 rounded-lg hover:bg-violet-500 transition-colors"
             >
               {task ? 'Save Changes' : 'Create Task'}
             </button>

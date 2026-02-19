@@ -13,8 +13,12 @@ import { Column } from './Column';
 import { TaskCard } from './TaskCard';
 import { TaskModal } from './TaskModal';
 
-export function Board() {
-  const { boardState, isLoading, error, addTask, updateTask, deleteTask, moveTask } = useBoard();
+interface BoardProps {
+  isAuthenticated: boolean;
+}
+
+export function Board({ isAuthenticated }: BoardProps) {
+  const { boardState, isLoading, error, addTask, updateTask, deleteTask, moveTask } = useBoard(isAuthenticated);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -111,7 +115,7 @@ export function Board() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
-        <div className="text-gray-500">Loading board...</div>
+        <div className="text-gray-400">Loading board...</div>
       </div>
     );
   }
@@ -119,8 +123,8 @@ export function Board() {
   return (
     <>
       {error && (
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mx-6 mt-4">
-          <p className="text-yellow-700 text-sm">{error} - Using local data</p>
+        <div className="bg-amber-500/10 border-l-4 border-amber-500 p-4 mx-6 mt-4">
+          <p className="text-amber-400 text-sm">{error} - Using local data</p>
         </div>
       )}
 
@@ -162,6 +166,7 @@ export function Board() {
       </DndContext>
 
       <TaskModal
+        key={`${editingTask?.id ?? 'new'}-${isModalOpen ? 'open' : 'closed'}`}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveTask}

@@ -3,9 +3,9 @@ interface PriorityBadgeProps {
 }
 
 const priorityConfig = {
-  low: { label: 'Low', className: 'bg-green-100 text-green-800' },
-  medium: { label: 'Medium', className: 'bg-yellow-100 text-yellow-800' },
-  high: { label: 'High', className: 'bg-red-100 text-red-800' },
+  low: { label: 'Low', className: 'bg-emerald-500/15 text-emerald-400' },
+  medium: { label: 'Medium', className: 'bg-amber-500/15 text-amber-400' },
+  high: { label: 'High', className: 'bg-red-500/15 text-red-400' },
 };
 
 export function PriorityBadge({ priority }: PriorityBadgeProps) {

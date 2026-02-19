@@ -3,11 +3,11 @@ interface TagBadgeProps {
 }
 
 const tagColors = [
-  'bg-blue-100 text-blue-800',
-  'bg-purple-100 text-purple-800',
-  'bg-pink-100 text-pink-800',
-  'bg-indigo-100 text-indigo-800',
-  'bg-teal-100 text-teal-800',
+  'bg-violet-500/15 text-violet-400',
+  'bg-sky-500/15 text-sky-400',
+  'bg-pink-500/15 text-pink-400',
+  'bg-indigo-500/15 text-indigo-400',
+  'bg-teal-500/15 text-teal-400',
 ];
 
 function hashString(str: string): number {

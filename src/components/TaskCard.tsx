@@ -30,32 +30,32 @@ export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className={`bg-white rounded-lg shadow-sm border border-gray-200 p-3 mb-2 group ${
-        isDragging ? 'opacity-50 shadow-lg' : ''
+      className={`bg-gray-800 rounded-lg border border-gray-700 p-3 mb-2 group hover:border-gray-600 transition-colors ${
+        isDragging ? 'opacity-50 shadow-lg shadow-black/20' : ''
       }`}
     >
       <div className="flex items-start gap-2">
         <button
           {...attributes}
           {...listeners}
-          className="mt-1 p-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
+          className="mt-1 p-1 text-gray-600 hover:text-gray-400 cursor-grab active:cursor-grabbing"
         >
           <GripVertical size={16} />
         </button>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="font-medium text-gray-900 text-sm">{task.title}</h3>
+            <h3 className="font-medium text-gray-100 text-sm">{task.title}</h3>
             <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
               <button
                 onClick={() => onEdit(task)}
-                className="p-1 text-gray-400 hover:text-blue-600"
+                className="p-1 text-gray-500 hover:text-violet-400"
               >
                 <Pencil size={14} />
               </button>
               <button
                 onClick={() => onDelete(task.id)}
-                className="p-1 text-gray-400 hover:text-red-600"
+                className="p-1 text-gray-500 hover:text-red-400"
               >
                 <Trash2 size={14} />
               </button>
