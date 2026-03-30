@@ -87,7 +87,15 @@ export function WelcomePage({ isSupabaseConfigured, onSignIn }: WelcomePageProps
 
       {/* Footer */}
       <footer className="relative py-6 text-center text-xs text-gray-600">
-        Built with React, Supabase & Tailwind
+        Powered by{' '}
+        <a
+          href="https://www.tertiarycourses.com.sg/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-500 hover:text-gray-400 underline transition-colors"
+        >
+          Tertiary Infotech Academy Pte Ltd
+        </a>
       </footer>
     </div>
   );

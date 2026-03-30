@@ -88,6 +88,18 @@ function App() {
       <main>
         <Board isAuthenticated={isAuthenticated} />
       </main>
+
+      <footer className="py-4 text-center text-xs text-gray-600 border-t border-gray-800">
+        Powered by{' '}
+        <a
+          href="https://www.tertiarycourses.com.sg/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-500 hover:text-gray-400 underline transition-colors"
+        >
+          Tertiary Infotech Academy Pte Ltd
+        </a>
+      </footer>
     </div>
   );
 }
